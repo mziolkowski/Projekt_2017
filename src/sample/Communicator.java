@@ -24,7 +24,7 @@ import jssc.SerialPortList;
 
 public class Communicator extends Application {
 
-    SerialPort stmPort = null;
+    SerialPort devicePort = null;
     ObservableList<String> portList;
 
     Label labelValue;
@@ -55,8 +55,8 @@ public class Communicator extends Application {
                                         String oldValue, String newValue) {
 
                         System.out.println(newValue);
-                        disconnectSTM32();
-                        connectSTM32(newValue);
+                        disconnectArduino();
+                        connectArduino(newValue);
                     }
 
                 });
@@ -75,9 +75,9 @@ public class Communicator extends Application {
         primaryStage.show();
     }
 
-    public boolean connectSTM32(String port) {
+    public boolean connectArduino(String port) {
 
-        System.out.println("connect STM32");
+        System.out.println("connect Arduino");
 
         boolean success = false;
         SerialPort serialPort = new SerialPort(port);
@@ -109,7 +109,7 @@ public class Communicator extends Application {
                 }
             });
 
-            stmPort = serialPort;
+            devicePort = serialPort;
             success = true;
         } catch (SerialPortException ex) {
             Logger.getLogger(Communicator.class.getName())
@@ -120,15 +120,15 @@ public class Communicator extends Application {
         return success;
     }
 
-    public void disconnectSTM32() {
+    public void disconnectArduino() {
 
-        System.out.println("disconnect STM32()");
-        if (stmPort != null) {
+        System.out.println("disconnectArduino()");
+        if (devicePort != null) {
             try {
-                stmPort.removeEventListener();
+                devicePort.removeEventListener();
 
-                if (stmPort.isOpened()) {
-                    stmPort.closePort();
+                if (devicePort.isOpened()) {
+                    devicePort.closePort();
                 }
 
             } catch (SerialPortException ex) {
@@ -140,7 +140,7 @@ public class Communicator extends Application {
 
     @Override
     public void stop() throws Exception {
-        disconnectSTM32();
+        disconnectArduino();
         super.stop();
     }
 
