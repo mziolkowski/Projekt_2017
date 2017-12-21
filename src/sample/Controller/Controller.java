@@ -5,8 +5,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -22,15 +24,31 @@ import static jssc.SerialPort.MASK_RXCHAR;
 
 public class Controller {
 
+    SerialPort devicePort = null;
+    ObservableList<String> portList;
+    Label labelValue;
+
     @FXML
     private ComboBox<String> comboBoxPorts;
 
     @FXML
     private TextArea resultsArea;
 
-    SerialPort devicePort = null;
-    ObservableList<String> portList;
-    Label labelValue;
+    @FXML
+    private Button diodeOn;
+
+    @FXML
+    private Button diodeOff;
+
+    @FXML
+    void setDiodeOff(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setDiodeOn(ActionEvent event) {
+
+    }
 
     private void detectPort() {
 
@@ -39,9 +57,8 @@ public class Controller {
         String[] serialPortNames = SerialPortList.getPortNames();
         for (String name : serialPortNames) {
             System.out.println(name);
-//            resultsArea.setText(name);
             portList.add(name);
-
+//            resultsArea.setText(name);
         }
     }
 
