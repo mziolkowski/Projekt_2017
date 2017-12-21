@@ -19,7 +19,7 @@
    <children>
       <AnchorPane prefHeight="258.0" prefWidth="447.0">
          <children>
-            <ComboBox fx:id="comboBoxPorts" layoutX="14.0" layoutY="28.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxPorts" layoutX="14.0" layoutY="28.0" prefWidth="150.0" promptText="Wybierz Port" />
             <TextArea fx:id="resultsArea" layoutX="225.0" layoutY="28.0" prefHeight="200.0" prefWidth="200.0" />
             <Text layoutX="224.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOG" />
             <Button fx:id="diodeOn" layoutX="14.0" layoutY="96.0" mnemonicParsing="false" onAction="#setDiodeOn" text="Włącz" />

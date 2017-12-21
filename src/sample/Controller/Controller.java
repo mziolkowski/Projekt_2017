@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortException;
@@ -67,7 +68,9 @@ public class Controller {
         labelValue = new Label();
 
         detectPort();
-        comboBoxPorts = new ComboBox(portList);
+        final ComboBox comboBoxPorts = new ComboBox<>();
+//        comboBoxPorts = new ComboBox(portList);
+        comboBoxPorts.getItems().addAll(portList);
         comboBoxPorts.valueProperty()
                 .addListener(new ChangeListener<String>() {
 
@@ -81,6 +84,7 @@ public class Controller {
                     }
 
                 });
+
 
     }
 
