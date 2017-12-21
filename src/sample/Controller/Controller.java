@@ -25,15 +25,19 @@ import static jssc.SerialPort.MASK_RXCHAR;
 
 public class Controller {
 
+    public Controller() {
+        init();
+    }
+
     SerialPort devicePort = null;
-    ObservableList<String> portList;
+    public ObservableList<String> portList;
     Label labelValue;
 
     @FXML
-    private ComboBox<String> comboBoxPorts;
+   private ComboBox comboBoxPorts = new ComboBox<>();
 
     @FXML
-    private TextArea resultsArea;
+    private TextArea resultsArea = new TextArea();
 
     @FXML
     private Button diodeOn;
@@ -51,7 +55,8 @@ public class Controller {
 
     }
 
-    private void detectPort() {
+    @FXML
+    public void detectPort() {
 
         portList = FXCollections.observableArrayList();
 
@@ -59,17 +64,42 @@ public class Controller {
         for (String name : serialPortNames) {
             System.out.println(name);
             portList.add(name);
-//            resultsArea.setText(name);
+            resultsArea.setText(name + " ");
         }
     }
+
+    @FXML
+    void setPorts(ActionEvent event) { }
+//        labelValue = new Label();
+//
+//        detectPort();
+//
+//
+//        comboBoxPorts.getItems().addAll(portList);
+//
+//        comboBoxPorts.valueProperty()
+//                .addListener(new ChangeListener<String>() {
+//
+//
+//                    public void changed(ObservableValue<? extends String> observable,
+//                                        String oldValue, String newValue) {
+//
+//                        System.out.println(newValue);
+//                        disconnectSTM32();
+//                        connectSTM32(newValue);
+//                    }
+//
+//                });
+//
+//    }
 
     public void init() {
 
         labelValue = new Label();
 
         detectPort();
-        final ComboBox comboBoxPorts = new ComboBox<>();
-//        comboBoxPorts = new ComboBox(portList);
+
+
         comboBoxPorts.getItems().addAll(portList);
         comboBoxPorts.valueProperty()
                 .addListener(new ChangeListener<String>() {
