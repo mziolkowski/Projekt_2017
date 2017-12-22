@@ -64,12 +64,11 @@ public class Controller {
         for (String name : serialPortNames) {
             System.out.println(name);
             portList.add(name);
-            resultsArea.setText(name + " ");
         }
     }
 
     @FXML
-    void setPorts(ActionEvent event) { }
+    void setPorts(ActionEvent event) {}
 //        labelValue = new Label();
 //
 //        detectPort();
@@ -97,6 +96,9 @@ public class Controller {
     private void initialize() {
         comboBoxPorts.setValue("Port");
         comboBoxPorts.setItems(portList);
+
+        resultsArea.setText("WITAMY W NASZYM PROGRAMIE!!! :)");
+        resultsArea.setWrapText(true);
     }
 
     public void init() {
@@ -104,7 +106,6 @@ public class Controller {
         labelValue = new Label();
 
         detectPort();
-
 
         comboBoxPorts.getItems().addAll(portList);
         comboBoxPorts.valueProperty()
@@ -115,6 +116,7 @@ public class Controller {
                                         String oldValue, String newValue) {
 
                         System.out.println(newValue);
+                        resultsArea.setText("Zostałes podłaczony do portu: " + newValue);
                         disconnectSTM32();
                         connectSTM32(newValue);
                     }
@@ -144,6 +146,7 @@ public class Controller {
                         String st = serialPort.readString(serialPortEvent
                                 .getEventValue());
                         System.out.println(st);
+                        resultsArea.setText(st);
 
                         //Update label in ui thread
                         Platform.runLater(() -> {
