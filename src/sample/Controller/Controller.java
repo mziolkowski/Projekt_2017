@@ -1,8 +1,5 @@
 package sample.Controller;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,9 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 import jssc.SerialPort;
-import jssc.SerialPortEvent;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
@@ -34,7 +29,7 @@ public class Controller {
     Label labelValue;
 
     @FXML
-   private ComboBox comboBoxPorts = new ComboBox();
+    private ComboBox comboBoxPorts = new ComboBox();
 
     @FXML
     private TextArea resultsArea = new TextArea();
@@ -48,11 +43,29 @@ public class Controller {
     @FXML
     void setDiodeOff(ActionEvent event) {
 
+        try {
+            devicePort.writeString("OFF");
+            resultsArea.setText("Wyłączono DIODE");
+            System.out.println("Wyłączono DIODE");
+
+        } catch (SerialPortException ex) {
+            System.out.println(ex);
+            resultsArea.setText(String.valueOf(ex));
+        }
     }
 
     @FXML
     void setDiodeOn(ActionEvent event) {
 
+        try {
+            devicePort.writeString("ON");
+            resultsArea.setText("Włączono DIODE");
+            System.out.println("Włączono DIODE");
+
+        } catch (SerialPortException ex) {
+            System.out.println(ex);
+            resultsArea.setText(String.valueOf(ex));
+        }
     }
 
     @FXML
@@ -72,8 +85,8 @@ public class Controller {
         Object newValue = comboBoxPorts.getValue();
         System.out.println(newValue);
         resultsArea.setText((String) newValue);
-        disconnectSTM32();
-        connectSTM32((String) newValue);
+        disconnectArduino();
+        connectArduino((String) newValue);
 
     }
 
@@ -88,10 +101,10 @@ public class Controller {
 
 
     @FXML
-    public boolean connectSTM32(String port) {
+    public boolean connectArduino(String port) {
 
-        System.out.println("connect STM32");
-        resultsArea.setText("connect STM32\n");
+        System.out.println("Podłączono Arduino poprawnie");
+        resultsArea.setText("Podłączono Arduino poprawnie\n");
 
         boolean success = false;
         SerialPort serialPort = new SerialPort(port);
@@ -103,28 +116,6 @@ public class Controller {
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
             serialPort.setEventsMask(MASK_RXCHAR);
-            serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
-                if (serialPortEvent.isRXCHAR()) {
-                    try {
-                        String st = serialPort.readString(serialPortEvent
-                                .getEventValue());
-                        System.out.println(st);
-                        resultsArea.setText(st);
-
-                        //Update label in ui thread
-                        Platform.runLater(() -> {
-                            labelValue.setText(st);
-                            resultsArea.setText(st);
-                        });
-
-                    } catch (SerialPortException ex) {
-                        Logger.getLogger(Controller.class.getName())
-                                .log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            });
-
             devicePort = serialPort;
             success = true;
         } catch (SerialPortException ex) {
@@ -137,9 +128,9 @@ public class Controller {
     }
 
     @FXML
-    public void disconnectSTM32() {
+    public void disconnectArduino() {
 
-        System.out.println("disconnectSTM32()");
+        System.out.println("disconnectAdruino()");
         if (devicePort != null) {
             try {
                 devicePort.removeEventListener();
