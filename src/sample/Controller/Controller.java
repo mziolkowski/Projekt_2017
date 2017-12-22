@@ -34,7 +34,7 @@ public class Controller {
     Label labelValue;
 
     @FXML
-   private ComboBox comboBoxPorts = new ComboBox<>();
+   private ComboBox comboBoxPorts = new ComboBox();
 
     @FXML
     private TextArea resultsArea = new TextArea();
@@ -92,6 +92,12 @@ public class Controller {
 //                });
 //
 //    }
+
+    @FXML
+    private void initialize() {
+        comboBoxPorts.setValue("Port");
+        comboBoxPorts.setItems(portList);
+    }
 
     public void init() {
 
