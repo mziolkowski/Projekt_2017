@@ -26,7 +26,7 @@ import static jssc.SerialPort.MASK_RXCHAR;
 public class Controller {
 
     public Controller() {
-        init();
+        detectPort();
     }
 
     SerialPort devicePort = null;
@@ -68,67 +68,30 @@ public class Controller {
     }
 
     @FXML
-    void setPorts(ActionEvent event) {}
-//        labelValue = new Label();
-//
-//        detectPort();
-//
-//
-//        comboBoxPorts.getItems().addAll(portList);
-//
-//        comboBoxPorts.valueProperty()
-//                .addListener(new ChangeListener<String>() {
-//
-//
-//                    public void changed(ObservableValue<? extends String> observable,
-//                                        String oldValue, String newValue) {
-//
-//                        System.out.println(newValue);
-//                        disconnectSTM32();
-//                        connectSTM32(newValue);
-//                    }
-//
-//                });
-//
-//    }
+    void setPorts(ActionEvent event) {
+        Object newValue = comboBoxPorts.getValue();
+        System.out.println(newValue);
+        resultsArea.setText((String) newValue);
+        disconnectSTM32();
+        connectSTM32((String) newValue);
+
+    }
 
     @FXML
     private void initialize() {
         comboBoxPorts.setValue("Port");
         comboBoxPorts.setItems(portList);
 
-        resultsArea.setText("WITAMY W NASZYM PROGRAMIE!!! :)");
+        resultsArea.setText("WITAMY W NASZYM PROGRAMIE!!! :)\n\n");
         resultsArea.setWrapText(true);
     }
 
-    public void init() {
 
-        labelValue = new Label();
-
-        detectPort();
-
-        comboBoxPorts.getItems().addAll(portList);
-        comboBoxPorts.valueProperty()
-                .addListener(new ChangeListener<String>() {
-
-
-                    public void changed(ObservableValue<? extends String> observable,
-                                        String oldValue, String newValue) {
-
-                        System.out.println(newValue);
-                        resultsArea.setText("Zostałes podłaczony do portu: " + newValue);
-                        disconnectSTM32();
-                        connectSTM32(newValue);
-                    }
-
-                });
-
-
-    }
-
+    @FXML
     public boolean connectSTM32(String port) {
 
         System.out.println("connect STM32");
+        resultsArea.setText("connect STM32\n");
 
         boolean success = false;
         SerialPort serialPort = new SerialPort(port);
@@ -151,6 +114,7 @@ public class Controller {
                         //Update label in ui thread
                         Platform.runLater(() -> {
                             labelValue.setText(st);
+                            resultsArea.setText(st);
                         });
 
                     } catch (SerialPortException ex) {
@@ -172,6 +136,7 @@ public class Controller {
         return success;
     }
 
+    @FXML
     public void disconnectSTM32() {
 
         System.out.println("disconnectSTM32()");
