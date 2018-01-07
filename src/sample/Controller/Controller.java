@@ -1,33 +1,55 @@
-package sample;
-
-import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package sample.Controller;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import jssc.SerialPort;
-import static jssc.SerialPort.MASK_RXCHAR;
 import jssc.SerialPortEvent;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
 
-public class Communicator extends Application {
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static jssc.SerialPort.MASK_RXCHAR;
+
+public class Controller {
 
     SerialPort devicePort = null;
     ObservableList<String> portList;
-
     Label labelValue;
+
+    @FXML
+    private ComboBox<String> comboBoxPorts;
+
+    @FXML
+    private TextArea resultsArea;
+
+    @FXML
+    private Button diodeOn;
+
+    @FXML
+    private Button diodeOff;
+
+    @FXML
+    void setDiodeOff(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setDiodeOn(ActionEvent event) {
+
+    }
 
     private void detectPort() {
 
@@ -37,47 +59,38 @@ public class Communicator extends Application {
         for (String name : serialPortNames) {
             System.out.println(name);
             portList.add(name);
+//            resultsArea.setText(name);
         }
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void init() {
 
         labelValue = new Label();
 
         detectPort();
-        final ComboBox comboBoxPorts = new ComboBox(portList);
+        final ComboBox comboBoxPorts = new ComboBox<>();
+//        comboBoxPorts = new ComboBox(portList);
+        comboBoxPorts.getItems().addAll(portList);
         comboBoxPorts.valueProperty()
                 .addListener(new ChangeListener<String>() {
 
-                    @Override
+
                     public void changed(ObservableValue<? extends String> observable,
                                         String oldValue, String newValue) {
 
                         System.out.println(newValue);
-                        disconnectArduino();
-                        connectArduino(newValue);
+                        disconnectSTM32();
+                        connectSTM32(newValue);
                     }
 
                 });
 
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(
-                comboBoxPorts, labelValue);
 
-        StackPane root = new StackPane();
-        root.getChildren().add(vBox);
-
-        Scene scene = new Scene(root, 300, 250);
-
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
-    public boolean connectArduino(String port) {
+    public boolean connectSTM32(String port) {
 
-        System.out.println("connect Arduino");
+        System.out.println("connect STM32");
 
         boolean success = false;
         SerialPort serialPort = new SerialPort(port);
@@ -102,7 +115,7 @@ public class Communicator extends Application {
                         });
 
                     } catch (SerialPortException ex) {
-                        Logger.getLogger(Communicator.class.getName())
+                        Logger.getLogger(Controller.class.getName())
                                 .log(Level.SEVERE, null, ex);
                     }
 
@@ -112,7 +125,7 @@ public class Communicator extends Application {
             devicePort = serialPort;
             success = true;
         } catch (SerialPortException ex) {
-            Logger.getLogger(Communicator.class.getName())
+            Logger.getLogger(Controller.class.getName())
                     .log(Level.SEVERE, null, ex);
             System.out.println("SerialPortException: " + ex.toString());
         }
@@ -120,9 +133,9 @@ public class Communicator extends Application {
         return success;
     }
 
-    public void disconnectArduino() {
+    public void disconnectSTM32() {
 
-        System.out.println("disconnectArduino()");
+        System.out.println("disconnectSTM32()");
         if (devicePort != null) {
             try {
                 devicePort.removeEventListener();
@@ -132,19 +145,11 @@ public class Communicator extends Application {
                 }
 
             } catch (SerialPortException ex) {
-                Logger.getLogger(Communicator.class.getName())
+                Logger.getLogger(Controller.class.getName())
                         .log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    @Override
-    public void stop() throws Exception {
-        disconnectArduino();
-        super.stop();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
