@@ -10,7 +10,6 @@
  */
 
 package sample.Controller;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,17 +26,17 @@ import jssc.SerialPortList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import static jssc.SerialPort.MASK_RXCHAR;
 
-public class Controller {
+public class Controller{
 
-    public Controller() {
+    public Controller(){
+
         detectPort();
     }
-
     SerialPort devicePort = null;
     public ObservableList<String> portList;
-    Label labelValue;
 
     @FXML
     private ComboBox comboBoxPorts = new ComboBox();
@@ -46,17 +45,36 @@ public class Controller {
     private TextArea resultsArea = new TextArea();
 
     @FXML
+    private TextArea resultsButton = new TextArea();
+
+    @FXML
     private Button diodeOn;
 
     @FXML
     private Button diodeOff;
 
     @FXML
-    void setDiodeOff(ActionEvent event) {
+    private Button readButton;
 
+
+    public void setTextOn() throws SerialPortException {
+        try {
+        String text = devicePort.readString();
+        System.out.println(text);
+        resultsButton.setText(text);
+        resultsButton.setEditable(false);
+        } catch (SerialPortException ex) {
+            System.out.println(ex);
+            resultsArea.setText(String.valueOf(ex));
+        }
+    }
+
+    @FXML
+    void setDiodeOff(ActionEvent event)  {
         try {
             devicePort.writeString("OFF");
             resultsArea.setText("Wyłączono DIODE");
+            resultsArea.setEditable(false);
             System.out.println("Wyłączono DIODE");
 
         } catch (SerialPortException ex) {
@@ -71,6 +89,7 @@ public class Controller {
         try {
             devicePort.writeString("ON");
             resultsArea.setText("Włączono DIODE");
+            resultsArea.setEditable(false);
             System.out.println("Włączono DIODE");
 
         } catch (SerialPortException ex) {
@@ -81,9 +100,7 @@ public class Controller {
 
     @FXML
     public void detectPort() {
-
         portList = FXCollections.observableArrayList();
-
         String[] serialPortNames = SerialPortList.getPortNames();
         for (String name : serialPortNames) {
             System.out.println(name);
@@ -105,11 +122,9 @@ public class Controller {
     private void initialize() {
         comboBoxPorts.setValue("Port");
         comboBoxPorts.setItems(portList);
-
         resultsArea.setText("WITAMY W NASZYM PROGRAMIE!!! :)\n\n");
         resultsArea.setWrapText(true);
     }
-
 
     @FXML
     public boolean connectArduino(String port) {
@@ -130,8 +145,7 @@ public class Controller {
             devicePort = serialPort;
             success = true;
         } catch (SerialPortException ex) {
-            Logger.getLogger(Controller.class.getName())
-                    .log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("SerialPortException: " + ex.toString());
         }
 
@@ -151,8 +165,7 @@ public class Controller {
                 }
 
             } catch (SerialPortException ex) {
-                Logger.getLogger(Controller.class.getName())
-                        .log(Level.SEVERE, null, ex);
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
