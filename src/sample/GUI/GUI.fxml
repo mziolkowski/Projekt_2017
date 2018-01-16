@@ -23,7 +23,7 @@
             <TextArea fx:id="resultsButton" editable="false" layoutX="14.0" layoutY="180.0" prefHeight="27.0" prefWidth="150.0" />
             <Text layoutX="224.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOG" />
             <Button fx:id="diodeOn" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" onAction="#setDiodeOn" text="Włącz" />
-            <Button fx:id="diodeOff" layoutX="89.0" layoutY="88.0" mnemonicParsing="false" onAction="#setDiodeOff" text="Wyłącz" />
+            <Button fx:id="diodeOff" layoutX="90.0" layoutY="88.0" mnemonicParsing="false" onAction="#setDiodeOff" text="Wyłącz" />
             <Button fx:id="readButton" layoutX="14.0" layoutY="140.0" mnemonicParsing="false" onAction="#setTextOn" text="Odczytaj stan" />
             <Text layoutX="14.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reakcja na button" />
             <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sterowanie Diodą" />

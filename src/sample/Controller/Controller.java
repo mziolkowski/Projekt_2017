@@ -56,7 +56,7 @@ public class Controller{
     @FXML
     private Button readButton;
 
-
+// by Kate
     public void setTextOn() throws SerialPortException {
         try {
         String text = devicePort.readString();
@@ -68,6 +68,7 @@ public class Controller{
             resultsArea.setText(String.valueOf(ex));
         }
     }
+//end Kate
 
     @FXML
     void setDiodeOff(ActionEvent event)  {
